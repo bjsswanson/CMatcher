@@ -13,12 +13,14 @@ void readme();
 int processArgs(int argc, char** argv);
 int capture(string output_file);
 int compare(Mat img_1, Mat img_2);
-void find(string search_dir);
+int find(string search_dir);
+int camera();
 
 bool cap = false;
 bool comp = false;
 bool fi = false;
 
+Mat mat;
 string input_file1, input_file2;
 string output_file, search_dir; 
 
@@ -54,7 +56,9 @@ int main( int argc, char** argv ) {
       return -1;
     }
 
-    find(search_dir);
+    if(find(search_dir) == -1) {
+      return -1;
+    }
   }
 
   if(!cap && !comp && !fi) {
@@ -64,24 +68,40 @@ int main( int argc, char** argv ) {
   return 0;
 }
 
-void find(string search_dir) { 
+int find(string search_dir) { 
   
+  if(camera() == -1){
+    return -1;
+  }
+
   tinydir_dir dir;
   tinydir_open(&dir, search_dir.c_str());
+
+  int best_matches = 0;
+  string best_path;
 
   while (dir.has_next) {
     tinydir_file file;
     tinydir_readfile(&dir, &file);
 
-    printf("%s", file.name);
-    if (file.is_dir)
-    {
-      printf("/");
-    }
-    printf("\n");
+    if (!file.is_dir){
+      Mat img_1 = imread(file.path, IMREAD_GRAYSCALE );
+      
+      int matches = compare(mat, img_1);
+      std::cout << file.path << " : " << matches << std::endl;
 
+      if(matches > best_matches) {
+        best_matches = matches;
+        best_path = string(file.path); 
+      }
+    }
+    
     tinydir_next(&dir);
   }
+
+  std::cout << best_path << std::endl;
+
+  return 0;
 }
 
 
@@ -139,25 +159,30 @@ int capture(string output_file) {
     return -1;
   }
 
+  if(camera() == -1){
+    return -1;
+  }
+
+  try {
+    imwrite(output_file, mat);
+  } catch (std::exception& ex) {
+    fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
+    return -1;
+  }
+
+  fprintf(stdout, "Saved image file.\n");
+  return 0;
+}
+
+int camera(){
   VideoCapture cap(0); // open the default camera
     
   if(!cap.isOpened()) {  // check if we succeeded
     std::cout << " Unable to access camera." << std::endl; 
     return -1;
   }
-
-  Mat mat;
+  
   cap >> mat;
-
-  try {
-      imwrite(output_file, mat);
-  }
-  catch (std::exception& ex) {
-      fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
-      return -1;
-  }
-
-  fprintf(stdout, "Saved image file.\n");
   return 0;
 }
 
