@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( CMatcher )
+find_package( OpenCV REQUIRED )
+add_executable( CMatcher CMatcher.cpp )
+target_link_libraries( CMatcher ${OpenCV_LIBS} )
