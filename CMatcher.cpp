@@ -145,10 +145,20 @@ int compare(Mat img_1, Mat img_2) {
   std::vector< DMatch > good_matches;
 
   for( int i = 0; i < descriptors_1.rows; i++ ) { 
-    if( matches[i].distance <= max( 2 * min_dist, 0.02) ) { 
+    if( matches[i].distance <= max(5 * min_dist, 0.02) ) { 
       good_matches.push_back( matches[i]); 
     }
   }
+
+  Mat img_matches;
+  drawMatches( img_1, keypoints_1, img_2, keypoints_2,
+               good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
+               vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+
+  //-- Show detected matches
+  imshow( "Good Matches", img_matches );
+
+  waitKey(0);
 
   return good_matches.size();
 }
