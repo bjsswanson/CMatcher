@@ -145,7 +145,7 @@ int compare(Mat img_1, Mat img_2) {
   std::vector< DMatch > good_matches;
 
   for( int i = 0; i < descriptors_1.rows; i++ ) { 
-    if( matches[i].distance <= max(5 * min_dist, 0.02) ) { 
+    if( matches[i].distance <= max(2 * min_dist, 0.02) ) { 
       good_matches.push_back( matches[i]); 
     }
   }
@@ -176,7 +176,7 @@ int capture(string output_file) {
   try {
     imwrite(output_file, mat);
   } catch (std::exception& ex) {
-    fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
+    fprintf(stderr, "Exception saving image: %s\n", ex.what());
     return -1;
   }
 
