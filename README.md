@@ -23,3 +23,8 @@ This will take an image with the camera and save it to the output file
 -f -d search_dir
 ```
 This will take an image and compare it to a folder of images and will return the relative path of the image with the most good matches to the image taken
+
+Notes
+====
+
+Please note that both commands that take images also print "Cleaned up camera" to cout. This seems to be part of the libary and cannot be turned off.
