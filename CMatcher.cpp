@@ -150,13 +150,13 @@ int compare(Mat img_1, Mat img_2) {
     }
   }
 
-  Mat img_matches;
-  drawMatches( img_1, keypoints_1, img_2, keypoints_2,
-               good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
-               vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+  // Mat img_matches;
+  // drawMatches( img_1, keypoints_1, img_2, keypoints_2,
+  //              good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
+  //              vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
 
-  //-- Show detected matches
-  imshow( "Good Matches", img_matches );
+  // //-- Show detected matches
+  // imshow( "Good Matches", img_matches );
 
   waitKey(0);
 
