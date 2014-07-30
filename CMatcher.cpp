@@ -51,11 +51,6 @@ int main( int argc, char** argv ) {
   } 
 
   if(fi) {
-    if(search_dir.empty()){
-      std::cout << "Missing search directory" << std::endl;
-      return -1;
-    }
-
     if(find(search_dir) == -1) {
       return -1;
     }
@@ -70,6 +65,11 @@ int main( int argc, char** argv ) {
 
 int find(string search_dir) { 
   
+  if(search_dir.empty()){
+    std::cout << "Missing search directory" << std::endl;
+    return -1;
+  }
+
   if(camera() == -1){
     return -1;
   }
